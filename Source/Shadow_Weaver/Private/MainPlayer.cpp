@@ -5,12 +5,14 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+
 #include "GameFramework/SpringArmComponent.h"
 
 AMainPlayer::AMainPlayer()
 	: bDead(false) 
 	, fMaxWalkSpeed(400)
 	, fMaxRunSpeed(800)
+	, bIsFalling(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 		
@@ -40,12 +42,13 @@ AMainPlayer::AMainPlayer()
 void AMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	bIsFalling = GetCharacterMovement()->IsFalling();
 }
 
 void AMainPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 
 }
 
@@ -62,8 +65,6 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("MoveForwardBackward",this, &AMainPlayer::MoveForwardBackward);
 	PlayerInputComponent->BindAxis("MoveLeftRight", this, &AMainPlayer::MoveLeftRight);
 	
-	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMainPlayer::SprintStart);
-	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMainPlayer::SprintEnd);
 }
 
 void AMainPlayer::MoveForwardBackward(float _Axis)
@@ -104,14 +105,4 @@ void AMainPlayer::StopJumping()
 	{
 		ACharacter::StopJumping();
 	}
-}
-
-void AMainPlayer::SprintStart()
-{
-
-}
-
-void AMainPlayer::SprintEnd()
-{
-
 }
