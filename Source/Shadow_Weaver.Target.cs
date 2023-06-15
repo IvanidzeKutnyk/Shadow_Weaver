@@ -1,14 +1,15 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
 using System.Collections.Generic;
 
 public class Shadow_WeaverTarget : TargetRules
 {
-	public Shadow_WeaverTarget( TargetInfo Target) : base(Target)
+	public Shadow_WeaverTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.AddRange( new string[] { "Shadow_Weaver" } );
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
+		ExtraModuleNames.Add("Shadow_Weaver");
 	}
 }
