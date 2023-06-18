@@ -37,6 +37,25 @@ void PlayerStorage::RemoveFromStorage(int _key, int _value)
 
 }
 
+int PlayerStorage::SearchByID(int _key)
+{
+	auto itr = this->m_PlayerStorage.find(_key);
+
+	if (itr != this->m_PlayerStorage.end())
+	{
+		return itr->second;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+void PlayerStorage::ParseStorage()
+{
+	const char file_name[] = "../data/GameObjects.json";
+}
+
 PlayerStorage::PlayerStorage()
 {
 }

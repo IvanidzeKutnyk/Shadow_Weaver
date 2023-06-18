@@ -8,6 +8,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "../../Utils/FileUtils.h"
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -57,6 +59,8 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 	
+
+
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
