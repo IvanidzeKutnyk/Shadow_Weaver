@@ -1,3 +1,69 @@
 {
-
+    "GameObjects": [
+        {
+            "Type": "Actor",
+            "RenderType": "Sphere",
+            "X": 10,
+            "Y": 12,
+            "Width": 50,
+            "Height": 60,
+            "Materials": 
+            [
+                244,
+                213,
+                231
+            ]
+        },
+        {
+            "Type": "Actor",
+            "RenderType": "Triangle",
+            "X": 100,
+            "Y": 120,
+            "Width": 45,
+            "Height": 63
+        },
+        {
+            "Type": "Pawn",
+            "RenderType": "Square",
+            "X": 340,
+            "Y": 244,
+            "Width": 133,
+            "Height": 89,
+            "AnimationSpeed" : 12,
+            "AnimationLength" : 200,
+            "AnimationAxis" : "XY",
+            "Materials": 
+            [
+                44,
+                203,
+                23
+            ]
+        },
+        {
+            "Type": "Actor",
+            "RenderType": "Hexagon",
+            "X": 640,
+            "Y": 644,
+            "Width": 150,
+            "Height": 200,
+            "Materials": 
+            [
+                23,
+                78,
+                12
+            ]
+        },
+        {
+            "Type" : "Pawn",
+            "RenderType": "Square",
+            "X": 550,
+            "Y": 250,
+            "Width": 150,
+            "Height": 200,
+            "AnimationSpeed" : 12,
+            "AnimationLength" : 200,
+            "AnimationAxis" : "X",
+            "Materials": "image.png"
+        }
+    ]
 }
