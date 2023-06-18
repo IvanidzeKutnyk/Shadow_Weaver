@@ -36,9 +36,8 @@ bool FileUtils::WriteFileSTR(const FString& _FilePath, FString& _InputData)
 
 bool FileUtils::CreateJsonObjectFromString(const FString& _OutputData, TSharedPtr<FJsonObject>& _JsonObject)
 {
-	TArray < TSharedPtr<FJsonValue>> noope;
 
-	if (FJsonSerializer::Deserialize(TJsonReaderFactory<TCHAR>::Create(_OutputData), noope))
+	if (FJsonSerializer::Deserialize(TJsonReaderFactory<TCHAR>::Create(_OutputData), _JsonObject))
 	{
 		return true;
 	}
@@ -47,13 +46,13 @@ bool FileUtils::CreateJsonObjectFromString(const FString& _OutputData, TSharedPt
 }
 
 bool FileUtils::CreateStringFromJsonObject(FString& _OutputData, const TSharedPtr<FJsonObject>& _JsonObject)
-{/*
+{
 	if (FJsonSerializer::Serialize(_JsonObject.ToSharedRef(), TJsonWriterFactory<>::Create(&_OutputData, 0)))
 
 	{
 		return true;
 	}
-	UE_LOG(LogTemp, Error, TEXT("Error: Try to create String.")); // Check Error */
+	UE_LOG(LogTemp, Error, TEXT("Error: Try to create String.")); // Check Error 
 	return false;
 }
 
