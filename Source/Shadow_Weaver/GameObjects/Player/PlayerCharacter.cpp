@@ -58,16 +58,6 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-	
-	FString path = "C:\\Unreal\\MainGameProject\\Shadow_Weaver\\Data\\GameObjects.json";
-	FString path1 = "C:\\Unreal\\MainGameProject\\Shadow_Weaver\\Data\\GameObjects1.json";
-	FString data;
-	if (FileUtils::ReadFileSTR(path, data))
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s"), *data); // Check Error 
-
-	}
-
 }
 
 void APlayerCharacter::Tick(float DeltaTime)

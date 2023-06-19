@@ -1,0 +1,12 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "WeaponItem.h"
+
+WeaponItem::WeaponItem() : GameItem()
+{
+}
+
+WeaponItem::~WeaponItem()
+{
+}

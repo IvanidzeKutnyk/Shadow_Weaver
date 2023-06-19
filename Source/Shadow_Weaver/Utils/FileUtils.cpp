@@ -69,12 +69,22 @@ TSharedPtr<FJsonObject> FileUtils::ReadJson(const FString& _FilePath)
 	
 	CreateJsonObjectFromString(JsonString, JsonObject);
 	
-	return nullptr;
+	return JsonObject;
 	
 }
 
 void FileUtils::WriteJson(const FString& _FilePath, TSharedPtr<FJsonObject> _JsonObject)
 {
+	FString JsonString = "";
+	if (!CreateStringFromJsonObject(JsonString, _JsonObject)) 
+	{
+		return;
+	}
+
+	if (!WriteFileSTR(_FilePath, JsonString))
+	{
+		return;
+	}
 }
 
 FileUtils::FileUtils()

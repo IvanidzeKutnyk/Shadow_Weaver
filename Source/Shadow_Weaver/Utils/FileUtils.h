@@ -2,7 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "HAL/PlatformFileManager.h"
+#include <map>
 #include "Misc/FileHelper.h"
+
+
 
 class FJsonObject;
 
