@@ -13,13 +13,14 @@ int GameItem::GetId()
 	return this->m_id;
 }
 
-void GameItem::Parse()
+void GameItem::Parse(const TSharedPtr<FJsonObject>& _jsonObject)
 {
-
+	_jsonObject->TryGetNumberField("ID", this->m_id);
 }
 
 
 GameItem::GameItem()
+	: m_id(0)
 {
 }
 

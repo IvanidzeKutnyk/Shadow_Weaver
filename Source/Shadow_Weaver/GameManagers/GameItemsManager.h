@@ -8,10 +8,17 @@ class GameItem;
 class SHADOW_WEAVER_API GameItemsManager
 {
 private:
-	std::vector <GameItem*> m_items;
-public:
-	void ParseItems();
-public:
 	GameItemsManager();
+public:
 	~GameItemsManager();
+
+
+public:
+	static GameItemsManager* GetInstance();
+	void ParseItems();
+
+
+private:
+	static GameItemsManager* m_instance;
+	std::vector <GameItem*> m_items;
 };

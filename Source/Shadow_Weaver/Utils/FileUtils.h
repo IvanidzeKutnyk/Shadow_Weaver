@@ -11,6 +11,9 @@ class FJsonObject;
 
 class SHADOW_WEAVER_API FileUtils
 {
+public:
+	FileUtils();
+	~FileUtils();
 
 public:
 	static bool CheckFileExist(const FString& _FilePath);
@@ -22,7 +25,5 @@ public:
 	static bool CreateStringFromJsonObject(FString& _OutputData, const TSharedPtr<FJsonObject>& _JsonObject);
 	static void WriteJson(const FString& _FilePath, TSharedPtr<FJsonObject> _JsonObject);
 
-public:
-	FileUtils();
-	~FileUtils();
+
 };

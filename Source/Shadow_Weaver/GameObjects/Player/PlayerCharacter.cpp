@@ -7,8 +7,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "../../GameManagers/GameItemsManager.h"
 
-#include "../../Utils/FileUtils.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -58,6 +58,7 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	GameItemsManager::GetInstance()->ParseItems();
 }
 
 void APlayerCharacter::Tick(float DeltaTime)

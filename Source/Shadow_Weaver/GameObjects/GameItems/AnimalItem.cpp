@@ -10,3 +10,9 @@ AnimalItem::AnimalItem() : GameItem()
 AnimalItem::~AnimalItem()
 {
 }
+
+void AnimalItem::Parse(const TSharedPtr<FJsonObject>& _jsonObject)
+{
+	GameItem::Parse(_jsonObject);
+	
+}

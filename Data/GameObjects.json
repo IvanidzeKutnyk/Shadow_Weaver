@@ -2,24 +2,59 @@
     "GameItems":
     [ 
         {
-            "Type" : "AnimalItem"
+            "AnimalItem": 
+            [
+                {
+                    "ID" : 100
+                },
+                {
+                    "ID" : 101
+                }
+            ]
         },
-        
         {
-            "Type" : "WeaponItem"
+            "WeaponItem": 
+            [
+                {
+                    "ID" : 200
+                },
+                {
+                    "ID" : 201
+                }
+            ]
         },
-        
         {
-            "Type" : "ArmorItem"
+            "ArmorItem": 
+            [
+                {
+                    "ID" : 300
+                },
+                {
+                    "ID" : 301
+                }
+            ]
         },
-        
         {
-            "Type" : "MoneyItem"
+            "MoneyItem": 
+            [
+                {
+                    "ID" : 400
+                },
+                {
+                    "ID" : 401
+                }
+            ]
         },
-        
         {
-            "Type" : "ResourceItem"
+            "ResourceItem": 
+            [
+                {
+                    "ID" : 500
+                },
+                {
+                    "ID" : 501
+                }
+            ]
         }
     ]
-        
 }
