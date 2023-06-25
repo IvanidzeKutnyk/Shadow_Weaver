@@ -7,22 +7,31 @@
 
 // Sets default values
 APickableActor::APickableActor()
-	: m_boxSize(50, 50, 50)
+	: m_inputboxSize(100, 100, 100)
+	, m_visualboxSize(50,50,50)
 	, m_pickAble(true)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Capsule Component
-	BoxComponent = CreateDefaultSubobject< UBoxComponent > (TEXT("BoxComponent"));
-	BoxComponent->SetBoxExtent(m_boxSize);
-	BoxComponent->SetCollisionProfileName("Trigger");
-	BoxComponent->SetupAttachment(RootComponent);
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &APickableActor::OnOverlapBegin);
-	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &APickableActor::OnOverlapEnd);
+	// Input Box Component
+	InputBoxComponent = CreateDefaultSubobject< UBoxComponent > (TEXT("InputBoxComponent"));
+	InputBoxComponent->SetBoxExtent(m_inputboxSize);
+	InputBoxComponent->SetCollisionProfileName("InputTrigger");
+	InputBoxComponent->SetupAttachment(RootComponent);
+	InputBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &APickableActor::OnOverlapBegin);
+	InputBoxComponent->OnComponentEndOverlap.AddDynamic(this, &APickableActor::OnOverlapEnd);
+	
+	APickableActor::OnEndCursorOver;
+	APickableActor::OnBeginCursorOver;
+	// Visual Box Component
+	VisualBoxComponent = CreateDefaultSubobject< UBoxComponent >(TEXT("VisualBoxComponent"));
+	VisualBoxComponent->SetBoxExtent(m_visualboxSize);
+	VisualBoxComponent->SetCollisionProfileName("VisualTrigger");
+	VisualBoxComponent->SetupAttachment(InputBoxComponent);
 
-
+	//Mesh Component
 	MeshComponent = CreateDefaultSubobject < UStaticMeshComponent > (TEXT("MeshComponent"));
-	MeshComponent->AttachToComponent(BoxComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	MeshComponent->AttachToComponent(VisualBoxComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void APickableActor::BeginPlay()
@@ -45,11 +54,8 @@ void APickableActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 			APlayerCharacter* Player = static_cast<APlayerCharacter*> (OtherActor);
 			if (Player)
 			{
-				//Player->Tags.Add("T_Interactable");
 				GameCharacterManager::GetInstance()->SetInteractable(true);
-				//Player->interact = true;
 				GameCharacterManager::GetInstance()->SetPickableActor(this);
-				//Player->SetPickableActor(this);
 			}
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
 		}
@@ -64,4 +70,5 @@ void APickableActor::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* O
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
 	}
 }
+
 

@@ -27,11 +27,16 @@ public:
 			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
-	FVector m_boxSize;
+	FVector m_inputboxSize;
+	FVector m_visualboxSize;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-		class UBoxComponent* BoxComponent;
+		class UBoxComponent* InputBoxComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		class UBoxComponent* VisualBoxComponent;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		class UStaticMeshComponent* MeshComponent;
