@@ -5,6 +5,9 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
+class APickableActor;
+class PlayerStorage;
+
 UCLASS(config = Game)
 class SHADOW_WEAVER_API APlayerCharacter : public ACharacter
 {
@@ -32,6 +35,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+
+	void PressedInteractButton();
+	void UnPressedInteractButton();
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

@@ -4,6 +4,7 @@
 #include <vector>
 
 class GameItem;
+class APlayerCharacter;
 
 class SHADOW_WEAVER_API GameItemsManager
 {
@@ -16,7 +17,6 @@ public:
 public:
 	static GameItemsManager* GetInstance();
 	void ParseItems();
-
 
 private:
 	static GameItemsManager* m_instance;

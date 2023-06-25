@@ -27,21 +27,14 @@ public:
 			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
-	float m_InRadius;
-	float m_InHalfHeight;
-
-	enum class TYPES
-	{
-		MONEY,
-		ARMOR,
-		WEAPON,
-		RESOURCE
-	};
+	FVector m_boxSize;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-		class UCapsuleComponent* CapsuleComponent;
+		class UBoxComponent* BoxComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		class UStaticMeshComponent* MeshComponent;
+public:
+	bool m_pickAble;
 };

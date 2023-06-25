@@ -7,7 +7,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "../../GameObjects/GameActors/PickableActor.h"
 #include "../../GameManagers/GameItemsManager.h"
+#include "../../GameManagers/GameCharacterManager.h"
+
 
 
 APlayerCharacter::APlayerCharacter()
@@ -64,7 +67,18 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void APlayerCharacter::PressedInteractButton()
+{
+	if(GameCharacterManager::GetInstance()->GetInteractable())
+	{
+		GameCharacterManager::GetInstance()->GetPickableActor()->Destroy();
+	}
+}
+
+void APlayerCharacter::UnPressedInteractButton()
+{
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -83,8 +97,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
-
 	}
+	//Picking Up
+	PlayerInputComponent->BindAction("Button_E_Interactive", IE_Pressed, this, &APlayerCharacter::PressedInteractButton);
+	PlayerInputComponent->BindAction("Button_E_Interactive", IE_Released, this, &APlayerCharacter::UnPressedInteractButton);
+	
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
