@@ -4,8 +4,8 @@
 GameCharacterManager* GameCharacterManager::m_instance = nullptr;
 
 GameCharacterManager::GameCharacterManager()
-	: m_interact(false)
-	, m_tmpPickableActor(nullptr)
+	: m_tmpPickableActor(nullptr)
+	, bDebugFlag(true)
 {
 }
 
@@ -30,16 +30,6 @@ void GameCharacterManager::SetMainPlayer(APlayerCharacter* _mainplayer)
 APlayerCharacter* GameCharacterManager::GetMainPlayer()
 {
 	return this->m_mainplayer;
-}
-
-void GameCharacterManager::SetInteractable(bool _interact)
-{
-	this->m_interact = _interact;
-}
-
-bool GameCharacterManager::GetInteractable()
-{
-	return m_interact;
 }
 
 void GameCharacterManager::SetPickableActor(APickableActor* m_tmpActor)

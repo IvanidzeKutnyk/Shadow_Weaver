@@ -12,16 +12,17 @@ public:
 	~GameCharacterManager();
 public:
 	static GameCharacterManager* GetInstance();
-	void SetMainPlayer(APlayerCharacter* _mainplayer);
+
+	void SetMainPlayer(APlayerCharacter* _mainPlayer);
 	APlayerCharacter* GetMainPlayer();
 
-	void SetInteractable(bool _interact);
-	bool GetInteractable();
 	void SetPickableActor(APickableActor* m_tmpActor);
 	APickableActor* GetPickableActor();
+
+	bool bDebugFlag;
 private:
 	APickableActor* m_tmpPickableActor;
-	static GameCharacterManager* m_instance;
 	APlayerCharacter* m_mainplayer;
-	bool m_interact;
+
+	static GameCharacterManager* m_instance;
 };

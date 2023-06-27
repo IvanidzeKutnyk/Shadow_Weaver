@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "DrawDebugHelpers.h"
 #include "../../GameObjects/GameActors/PickableActor.h"
 #include "../../GameManagers/GameItemsManager.h"
 #include "../../GameManagers/GameCharacterManager.h"
@@ -14,49 +15,44 @@
 
 
 APlayerCharacter::APlayerCharacter()
+	:m_interactable_zone(false)
+	, m_pickable_item(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); 
 
-	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
-	// instead of recompiling to adjust them
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	CameraBoom->TargetArmLength = 400.0f;
+	CameraBoom->bUsePawnControlRotation = true; 
 
-	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	FollowCamera->bUsePawnControlRotation = false; 
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>
+			(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
@@ -67,11 +63,13 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	LineTraceToItems();
+
 }
 
 void APlayerCharacter::PressedInteractButton()
 {
-	if(GameCharacterManager::GetInstance()->GetInteractable())
+	if(this->m_interactable_zone && this->m_pickable_item)
 	{
 		GameCharacterManager::GetInstance()->GetPickableActor()->Destroy();
 	}
@@ -79,6 +77,56 @@ void APlayerCharacter::PressedInteractButton()
 
 void APlayerCharacter::UnPressedInteractButton()
 {
+}
+
+void APlayerCharacter::SetInteractable(bool _interact)
+{
+	this->m_interactable_zone = _interact;
+}
+
+bool APlayerCharacter::GetInteractable()
+{
+	return  this->m_interactable_zone;
+}
+
+
+void APlayerCharacter::LineTraceToItems()
+{
+	if (this->m_interactable_zone)
+	{
+		FHitResult OutHit;
+		FVector _ZVectorCorrection = { 0,0,50 };
+		FVector Start = APlayerCharacter::GetActorLocation() + _ZVectorCorrection;
+		FVector ForwardVector = FollowCamera->GetForwardVector();
+		FVector END = (Start + (ForwardVector * 2000.f));
+
+		FCollisionQueryParams CollisionParams;
+		DrawDebugLine(GetWorld(), Start, END, FColor::Green, false, 1, 0, 1);
+
+		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, END, ECC_Visibility, CollisionParams);
+		if (isHit)
+		{
+			if (OutHit.bBlockingHit)
+			{
+				if (GameCharacterManager::GetInstance()->GetPickableActor()->GetUniqueID() != OutHit.GetActor()->GetUniqueID())
+				{
+					this->m_pickable_item = false;
+				}
+				else
+				{
+					this->m_pickable_item = true;
+				}
+				if (GEngine && GameCharacterManager::GetInstance()->bDebugFlag)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %i, Name: %s"),
+						OutHit.GetActor()->GetUniqueID(), *OutHit.GetActor()->GetName()));
+					//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Impact Point: %s"), *OutHit.ImpactPoint.ToString()));
+					//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Normal Point: %s"), *OutHit.ImpactNormal.ToString()));
+				}
+			}
+		}
+	}
+	
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

@@ -45,7 +45,8 @@ void APickableActor::Tick(float DeltaTime)
 
 }
 
-void APickableActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void APickableActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
@@ -54,19 +55,28 @@ void APickableActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 			APlayerCharacter* Player = static_cast<APlayerCharacter*> (OtherActor);
 			if (Player)
 			{
-				GameCharacterManager::GetInstance()->SetInteractable(true);
+				Player->SetInteractable(true);
 				GameCharacterManager::GetInstance()->SetPickableActor(this);
 			}
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+			
+
+			UE_LOG(LogTemp, Warning, TEXT("Name: %i ."), this->GetUniqueID());
 		}
 	}
 	
 }
 
-void APickableActor::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void APickableActor::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
+		APlayerCharacter* Player = static_cast<APlayerCharacter*> (OtherActor);
+		if (Player)
+		{
+			Player->SetInteractable(false);
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
 	}
 }
