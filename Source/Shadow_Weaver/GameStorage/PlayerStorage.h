@@ -15,8 +15,7 @@ public:
 	void AddToStorage(int _key, int _value);
 	void RemoveFromStorage(int _key, int _value);
 	int SearchByID(int _key);
-	void ParseStorage();
-
+	void ParseItems(TSharedPtr<FJsonObject>& _jsonObject);
 public:
 	PlayerStorage();
 	~PlayerStorage();

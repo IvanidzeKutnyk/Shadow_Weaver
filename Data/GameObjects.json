@@ -55,6 +55,15 @@
                     "ID" : 501
                 }
             ]
+        },
+        {
+            "CharacterStorage": 
+            [
+                {
+                    "ID" : 100,
+                    "Count" : 5
+                }
+            ]
         }
     ]
 }

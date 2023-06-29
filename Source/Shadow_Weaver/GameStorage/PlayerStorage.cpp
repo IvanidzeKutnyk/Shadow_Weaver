@@ -1,4 +1,5 @@
 #include "PlayerStorage.h"
+#include "../Utils/FileUtils.h"
 
 void PlayerStorage::AddToStorage(int _key, int _value)
 {
@@ -51,9 +52,8 @@ int PlayerStorage::SearchByID(int _key)
 	}
 }
 
-void PlayerStorage::ParseStorage()
+void PlayerStorage::ParseItems(TSharedPtr<FJsonObject>& _jsonObject)
 {
-	const char file_name[] = "../data/GameObjects.json";
 }
 
 PlayerStorage::PlayerStorage()

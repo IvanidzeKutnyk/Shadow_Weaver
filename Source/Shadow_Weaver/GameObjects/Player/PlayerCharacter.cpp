@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "DrawDebugHelpers.h"
+#include "../../GameStorage/PlayerStorage.h"
 #include "../../GameObjects/GameActors/PickableActor.h"
 #include "../../GameManagers/GameItemsManager.h"
 #include "../../GameManagers/GameCharacterManager.h"
@@ -15,10 +16,13 @@
 
 
 APlayerCharacter::APlayerCharacter()
-	:m_interactable_zone(false)
+	: m_interactable_zone(false)
 	, m_pickable_item(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
+	m_playerStorage = new PlayerStorage();
+	GameCharacterManager::GetInstance()->SetCharacterStorage(m_playerStorage);
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -43,6 +47,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; 
+
+	
 }
 
 void APlayerCharacter::BeginPlay()
@@ -101,7 +107,12 @@ void APlayerCharacter::LineTraceToItems()
 		FVector END = (Start + (ForwardVector * 2000.f));
 
 		FCollisionQueryParams CollisionParams;
-		DrawDebugLine(GetWorld(), Start, END, FColor::Green, false, 1, 0, 1);
+
+		if(GameCharacterManager::GetInstance()->bDebugFlag) // Use for Debug
+		{
+			DrawDebugLine(GetWorld(), Start, END, FColor::Green, false, 1, 0, 1);
+		}
+		
 
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, END, ECC_Visibility, CollisionParams);
 		if (isHit)
@@ -116,17 +127,20 @@ void APlayerCharacter::LineTraceToItems()
 				{
 					this->m_pickable_item = true;
 				}
-				if (GEngine && GameCharacterManager::GetInstance()->bDebugFlag)
+				if (GEngine && GameCharacterManager::GetInstance()->bDebugFlag) // Use for Debug
 				{
 					GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %i, Name: %s"),
 						OutHit.GetActor()->GetUniqueID(), *OutHit.GetActor()->GetName()));
-					//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Impact Point: %s"), *OutHit.ImpactPoint.ToString()));
-					//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Normal Point: %s"), *OutHit.ImpactNormal.ToString()));
 				}
 			}
 		}
 	}
 	
+}
+
+PlayerStorage* APlayerCharacter::GetPlayerStorage()
+{
+	return this->m_playerStorage;
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

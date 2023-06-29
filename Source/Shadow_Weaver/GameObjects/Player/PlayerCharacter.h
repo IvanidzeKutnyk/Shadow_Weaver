@@ -42,6 +42,8 @@ public:
 
 	void LineTraceToItems();
 
+	PlayerStorage* GetPlayerStorage();
+
 public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
@@ -69,4 +71,6 @@ private:
 
 	bool m_interactable_zone;
 	bool m_pickable_item;
+
+	PlayerStorage* m_playerStorage;
 };

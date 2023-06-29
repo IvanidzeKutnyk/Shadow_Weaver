@@ -32,6 +32,16 @@ APlayerCharacter* GameCharacterManager::GetMainPlayer()
 	return this->m_mainplayer;
 }
 
+void GameCharacterManager::SetCharacterStorage(PlayerStorage* _playerStorage)
+{
+	this->m_playerStorage = _playerStorage;
+}
+
+PlayerStorage* GameCharacterManager::GetCharacterStorage()
+{
+	return this->m_playerStorage;
+}
+
 void GameCharacterManager::SetPickableActor(APickableActor* m_tmpActor)
 {
 	this->m_tmpPickableActor = m_tmpActor;
