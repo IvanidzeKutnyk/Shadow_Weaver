@@ -13,7 +13,7 @@ public:
 
 public:
 	void SetId(int _id);
-	int GetId();
+	int GetId() const;
 	virtual void Parse(const TSharedPtr<FJsonObject>& _jsonObject);
 
 private:

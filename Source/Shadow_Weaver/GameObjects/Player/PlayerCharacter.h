@@ -42,7 +42,6 @@ public:
 
 	void LineTraceToItems();
 
-	PlayerStorage* GetPlayerStorage();
 
 public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

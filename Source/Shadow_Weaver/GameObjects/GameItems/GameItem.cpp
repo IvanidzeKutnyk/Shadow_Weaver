@@ -8,7 +8,7 @@ void GameItem::SetId(int _id)
 	this->m_id = _id;
 }
 
-int GameItem::GetId()
+int GameItem::GetId() const
 {
 	return this->m_id;
 }

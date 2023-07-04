@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "PickableActor.generated.h"
 
+class GameItem;
 UCLASS()
 class SHADOW_WEAVER_API APickableActor : public AActor
 {
@@ -11,15 +12,16 @@ class SHADOW_WEAVER_API APickableActor : public AActor
 	
 public:	
 	APickableActor();
+	APickableActor(const GameItem*& _type_item);
 
 protected:
 	virtual void BeginPlay() override;
 
+private:
+	void Initialize();
+
 public:	
 	virtual void Tick(float DeltaTime) override;
-	
-	void SetActorId(int _actorid);
-	int GetActorId();
 
 	UFUNCTION()
 		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
@@ -32,7 +34,7 @@ public:
 private:
 	FVector m_inputboxSize;
 	FVector m_visualboxSize;
-	int m_actorId;;
+	const GameItem* m_type_item;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

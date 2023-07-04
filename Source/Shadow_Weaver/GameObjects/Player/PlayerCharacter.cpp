@@ -81,9 +81,6 @@ void APlayerCharacter::PressedInteractButton()
 	if(this->m_interactable_zone && this->m_pickable_item)
 	{
 		GameCharacterManager::GetInstance()->GetPickableActor()->Destroy();
-		this->m_playerStorage->AddToStorage(GameCharacterManager::GetInstance()->GetPickableActor()->GetActorId(),1);
-
-		UE_LOG(LogTemp, Warning, TEXT("Key: %i, Value: %i"), GameCharacterManager::GetInstance()->GetPickableActor()->GetActorId() ,m_playerStorage->SearchByID(GameCharacterManager::GetInstance()->GetPickableActor()->GetActorId())); // Check Error
 	}
 }
 
@@ -142,11 +139,6 @@ void APlayerCharacter::LineTraceToItems()
 		}
 	}
 	
-}
-
-PlayerStorage* APlayerCharacter::GetPlayerStorage()
-{
-	return this->m_playerStorage;
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
