@@ -1,0 +1,14 @@
+ {
+            "WeaponItem": 
+            [
+                {
+                    "ID" : 200,
+                    "Category" : "Axe",
+                    "Name" : "WP_Axe_01_A",
+                    "Damage" : 10
+                },
+                {
+                    "ID" : 201
+                }
+            ]
+        }

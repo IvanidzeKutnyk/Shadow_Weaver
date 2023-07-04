@@ -10,6 +10,7 @@ APickableActor::APickableActor()
 	: m_inputboxSize(100, 100, 100)
 	, m_visualboxSize(50,50,50)
 	, m_pickAble(true)
+	, m_actorId(11)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -32,17 +33,29 @@ APickableActor::APickableActor()
 	//Mesh Component
 	MeshComponent = CreateDefaultSubobject < UStaticMeshComponent > (TEXT("MeshComponent"));
 	MeshComponent->AttachToComponent(VisualBoxComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
 }
 
 void APickableActor::BeginPlay()
 {
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("Item111")); // Check Error
 }
 
 void APickableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void APickableActor::SetActorId(int _actorid)
+{
+	this->m_actorId = _actorid;
+}
+
+int APickableActor::GetActorId()
+{
+	return this->m_actorId;
 }
 
 void APickableActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 

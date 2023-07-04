@@ -17,6 +17,9 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+	
+	void SetActorId(int _actorid);
+	int GetActorId();
 
 	UFUNCTION()
 		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
@@ -29,6 +32,7 @@ public:
 private:
 	FVector m_inputboxSize;
 	FVector m_visualboxSize;
+	int m_actorId;;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
@@ -39,6 +43,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		class UStaticMeshComponent* MeshComponent;
+
+
 public:
 	bool m_pickAble;
 };
