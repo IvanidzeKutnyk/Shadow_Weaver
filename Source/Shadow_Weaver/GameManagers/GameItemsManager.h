@@ -12,8 +12,6 @@ private:
 	GameItemsManager();
 public:
 	~GameItemsManager();
-
-
 public:
 	static GameItemsManager* GetInstance();
 	void ParseItems();

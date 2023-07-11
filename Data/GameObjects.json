@@ -16,10 +16,44 @@
             "WeaponItem": 
             [
                 {
-                    "ID" : 200
+                    "ID" : 200,
+                    "Type" : "OneHand",
+                    "Category" : "Axe",
+                    "Name" : "WP_Axe_01_A",
+                    "Damage" : 0,
+                    "Speed" : 0,
+                    "Block" : 0,
+                    "AfterEffect": 0
                 },
                 {
-                    "ID" : 201
+                    "ID" : 201,
+                    "Type" : "OneHand",
+                    "Category" : "Axe",
+                    "Name" : "WP_Axe_01_B",
+                    "Damage" : 0,
+                    "Speed" : 0,
+                    "Block" : 0,
+                    "AfterEffect": 0
+                },
+                {
+                    "ID" : 202,
+                    "Type" : "OneHand",
+                    "Category" : "Axe",
+                    "Name" : "WP_Axe_02_A",
+                    "Damage" : 0,
+                    "Speed" : 0,
+                    "Block" : 0,
+                    "AfterEffect": 0
+                },
+                {
+                    "ID" : 203,
+                    "Type" : "OneHand",
+                    "Category" : "Axe",
+                    "Name" : "WP_Axe_02_B",
+                    "Damage" : 0,
+                    "Speed" : 0,
+                    "Block" : 0,
+                    "AfterEffect": 0
                 }
             ]
         },

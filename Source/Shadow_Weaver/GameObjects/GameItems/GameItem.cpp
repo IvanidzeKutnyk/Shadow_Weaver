@@ -16,6 +16,7 @@ int GameItem::GetId() const
 void GameItem::Parse(const TSharedPtr<FJsonObject>& _jsonObject)
 {
 	_jsonObject->TryGetNumberField("ID", this->m_id);
+	//UE_LOG(LogTemp, Warning, TEXT("ID: %i"), m_id);
 }
 
 
