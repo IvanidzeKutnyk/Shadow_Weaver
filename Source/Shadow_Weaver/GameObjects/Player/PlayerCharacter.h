@@ -21,23 +21,20 @@ public:
 
 protected:
 
-	void Move(const FInputActionValue& Value);
-
-	void Look(const FInputActionValue& Value);
-
-protected:
+	virtual void BeginPlay() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void BeginPlay() override;
+	void Move(const FInputActionValue& Value);
+
+	void Look(const FInputActionValue& Value);
 
 public:	
 	
 	virtual void Tick(float DeltaTime) override;
 
-public:
-
 	void PressedInteractButton();
+
 	void UnPressedInteractButton();
 
 	void SetInteractableInZone(bool _interact);
@@ -48,9 +45,10 @@ public:
 
 
 public:
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	FORCEINLINE class USpringArmComponent* GetCameraBoom();
+
+	FORCEINLINE class UCameraComponent* GetFollowCamera();
 
 private:
 	

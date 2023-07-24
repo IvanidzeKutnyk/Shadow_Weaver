@@ -1,4 +1,5 @@
 #include "PlayerCharacter.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -8,11 +9,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "DrawDebugHelpers.h"
+
 #include "../../GameStorage/PlayerStorage.h"
 #include "../../GameObjects/GameActors/PickableActor.h"
 #include "../../GameManagers/GameItemsManager.h"
-
-
 
 APlayerCharacter::APlayerCharacter()
 	: m_interactable_zone(false)
@@ -44,8 +44,6 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; 
-
-	
 }
 
 void APlayerCharacter::BeginPlay()
@@ -131,6 +129,16 @@ void APlayerCharacter::LineTraceToItems()
 void APlayerCharacter::SetPickableActor(APickableActor* _item)
 {
 	this->m_tmpPickableActor = _item;
+}
+
+USpringArmComponent* APlayerCharacter::GetCameraBoom()
+{
+	return CameraBoom;
+}
+
+UCameraComponent* APlayerCharacter::GetFollowCamera()
+{
+	return FollowCamera;
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

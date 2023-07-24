@@ -1,4 +1,5 @@
 #include "GameItemsManager.h"
+
 #include "../Utils/FileUtils.h"
 #include "../GameObjects/GameItems/AnimalItem.h"
 #include "../GameObjects/GameItems/ArmorItem.h"
@@ -11,7 +12,13 @@ GameItemsManager* GameItemsManager::m_instance = nullptr;
 
 void GameItemsManager::ParseItems()
 {
-	const FString filePath = "C:/Unreal/MainGameProject/Shadow_Weaver/Data/GameObjects.json";
+	const FString filePath = FPaths::ProjectContentDir() + "Data/GameObjects.json";
+	if (!FPaths::FileExists(filePath))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GameObjects file doesn`t exist by path: %s"), *filePath);
+		return;
+	}
+
 	TSharedPtr<FJsonObject> jsonObject = FileUtils::ReadJson(filePath);
 
 	const TArray<TSharedPtr<FJsonValue>>* GameItems = nullptr;
