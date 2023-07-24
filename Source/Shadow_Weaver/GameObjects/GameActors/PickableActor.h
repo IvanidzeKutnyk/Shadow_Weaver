@@ -11,6 +11,7 @@ class SHADOW_WEAVER_API APickableActor : public AActor
 	GENERATED_BODY()
 	
 public:	
+	bool M_DEBUG;
 	APickableActor();
 	APickableActor(const GameItem*& _type_item);
 

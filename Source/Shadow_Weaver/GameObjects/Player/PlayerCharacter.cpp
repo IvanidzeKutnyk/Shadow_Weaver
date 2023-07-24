@@ -11,19 +11,16 @@
 #include "../../GameStorage/PlayerStorage.h"
 #include "../../GameObjects/GameActors/PickableActor.h"
 #include "../../GameManagers/GameItemsManager.h"
-#include "../../GameManagers/GameCharacterManager.h"
 
 
 
 APlayerCharacter::APlayerCharacter()
 	: m_interactable_zone(false)
-	, m_pickable_item(false)
+	, m_pickable_itemHit(false)
+	, M_DEBUG(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
-	m_playerStorage = new PlayerStorage();
-	GameCharacterManager::GetInstance()->SetCharacterStorage(m_playerStorage);
-
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	bUseControllerRotationPitch = false;
@@ -70,17 +67,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	LineTraceToItems();
-
-
-
-
 }
 
 void APlayerCharacter::PressedInteractButton()
 {
-	if(this->m_interactable_zone && this->m_pickable_item)
+	if(this->m_interactable_zone && this->m_pickable_itemHit)
 	{
-		GameCharacterManager::GetInstance()->GetPickableActor()->Destroy();
+		this->m_tmpPickableActor->Destroy();
 	}
 }
 
@@ -88,16 +81,10 @@ void APlayerCharacter::UnPressedInteractButton()
 {
 }
 
-void APlayerCharacter::SetInteractable(bool _interact)
+void APlayerCharacter::SetInteractableInZone(bool _interact)
 {
 	this->m_interactable_zone = _interact;
 }
-
-bool APlayerCharacter::GetInteractable()
-{
-	return  this->m_interactable_zone;
-}
-
 
 void APlayerCharacter::LineTraceToItems()
 {
@@ -111,7 +98,7 @@ void APlayerCharacter::LineTraceToItems()
 
 		FCollisionQueryParams CollisionParams;
 
-		if(GameCharacterManager::GetInstance()->bDebugFlag) // Use for Debug
+		if(this->M_DEBUG) // Use for Debug
 		{
 			DrawDebugLine(GetWorld(), Start, END, FColor::Green, false, 1, 0, 1);
 		}
@@ -122,15 +109,15 @@ void APlayerCharacter::LineTraceToItems()
 		{
 			if (OutHit.bBlockingHit)
 			{
-				if (GameCharacterManager::GetInstance()->GetPickableActor()->GetUniqueID() != OutHit.GetActor()->GetUniqueID())
+				if (this->m_tmpPickableActor->GetUniqueID() != OutHit.GetActor()->GetUniqueID())
 				{
-					this->m_pickable_item = false;
+					this->m_pickable_itemHit = false;
 				}
 				else
 				{
-					this->m_pickable_item = true;
+					this->m_pickable_itemHit = true;
 				}
-				if (GEngine && GameCharacterManager::GetInstance()->bDebugFlag) // Use for Debug
+				if (GEngine && this->M_DEBUG) // Use for Debug
 				{
 					GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %i, Name: %s"),
 						OutHit.GetActor()->GetUniqueID(), *OutHit.GetActor()->GetName()));
@@ -139,6 +126,11 @@ void APlayerCharacter::LineTraceToItems()
 		}
 	}
 	
+}
+
+void APlayerCharacter::SetPickableActor(APickableActor* _item)
+{
+	this->m_tmpPickableActor = _item;
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

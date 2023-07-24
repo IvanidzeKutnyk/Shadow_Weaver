@@ -14,6 +14,9 @@ class SHADOW_WEAVER_API APlayerCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+
+	bool M_DEBUG;
+
 	APlayerCharacter();
 
 protected:
@@ -37,10 +40,11 @@ public:
 	void PressedInteractButton();
 	void UnPressedInteractButton();
 
-	void SetInteractable(bool _interact);
-	bool GetInteractable();
+	void SetInteractableInZone(bool _interact);
 
 	void LineTraceToItems();
+
+	void SetPickableActor(APickableActor* _item);
 
 
 public:
@@ -69,7 +73,8 @@ private:
 		class UInputAction* LookAction;
 
 	bool m_interactable_zone;
-	bool m_pickable_item;
+	bool m_pickable_itemHit;
 
-	PlayerStorage* m_playerStorage;
+	APickableActor* m_tmpPickableActor;
+
 };

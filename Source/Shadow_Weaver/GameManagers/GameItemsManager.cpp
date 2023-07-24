@@ -5,7 +5,6 @@
 #include "../GameObjects/GameItems/MoneyItem.h"
 #include "../GameObjects/GameItems/ResourceItem.h"
 #include "../GameObjects/GameItems/WeaponItem.h"
-#include "../GameManagers/GameCharacterManager.h"
 #include "../GameObjects/Player/PlayerCharacter.h"
 
 GameItemsManager* GameItemsManager::m_instance = nullptr;

@@ -2,7 +2,6 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "../../GameManagers/GameItemsManager.h"
-#include "../../GameManagers/GameCharacterManager.h"
 #include "../../GameObjects/Player/PlayerCharacter.h"
 #include "../../GameObjects/GameItems/GameItem.h"
 
@@ -11,6 +10,7 @@
 APickableActor::APickableActor() 
 	: AActor()
 {
+	this->M_DEBUG = false; // Use to Debug (FLAG)
 	this->m_type_item = nullptr;
 	this->Initialize();
 }
@@ -18,6 +18,7 @@ APickableActor::APickableActor()
 APickableActor::APickableActor(const GameItem*& _type_item)
 	: AActor()
 {
+	this->M_DEBUG = false; // Use to Debug (FLAG)
 	this->m_type_item = _type_item;
 	this->Initialize();
 }
@@ -73,13 +74,16 @@ void APickableActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 			APlayerCharacter* Player = static_cast<APlayerCharacter*> (OtherActor);
 			if (Player)
 			{
-				Player->SetInteractable(true);
-				GameCharacterManager::GetInstance()->SetPickableActor(this);
-			}
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
-			
+				Player->SetInteractableInZone(true);
+				Player->SetPickableActor(this);
 
-			UE_LOG(LogTemp, Warning, TEXT("Name: %i ."), this->GetUniqueID());
+			}
+			
+			if (M_DEBUG) //Use to Debug
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+				UE_LOG(LogTemp, Warning, TEXT("Name: %i ."), this->GetUniqueID());
+			}
 		}
 	}
 	
@@ -93,9 +97,13 @@ void APickableActor::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* O
 		APlayerCharacter* Player = static_cast<APlayerCharacter*> (OtherActor);
 		if (Player)
 		{
-			Player->SetInteractable(false);
+			Player->SetInteractableInZone(false);
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
+		
+		if (M_DEBUG) // Use to Debug
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
+		}
 	}
 }
 
