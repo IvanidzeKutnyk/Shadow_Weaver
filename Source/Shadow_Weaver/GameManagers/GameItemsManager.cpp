@@ -28,7 +28,7 @@ void GameItemsManager::ParseItems()
 	{
 		for (const TSharedPtr<FJsonValue>& GameItemValue : *(GameItems))
 		{
-			TSharedPtr<FJsonObject> GameItemObject = GameItemValue->AsObject();
+			const TSharedPtr<FJsonObject>& GameItemObject = GameItemValue->AsObject();
 
 			if (GameItemObject->TryGetArrayField("AnimalItem", tempItems))
 			{

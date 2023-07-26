@@ -15,8 +15,6 @@ class SHADOW_WEAVER_API APlayerCharacter : public ACharacter
 
 public:
 
-	bool M_DEBUG;
-
 	APlayerCharacter();
 
 protected:
@@ -28,6 +26,8 @@ protected:
 	void Move(const FInputActionValue& Value);
 
 	void Look(const FInputActionValue& Value);
+
+	void Crouch(const FInputActionValue& Value);
 
 public:	
 	
@@ -46,9 +46,14 @@ public:
 
 public:
 
-	FORCEINLINE class USpringArmComponent* GetCameraBoom();
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const;
 
-	FORCEINLINE class UCameraComponent* GetFollowCamera();
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const;
+
+private:
+
+	UFUNCTION()
+	void CrouchCameraAnimationProgress(float Value);
 
 private:
 	
@@ -69,6 +74,17 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 		class UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* CrouchAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Variables, meta = (AllowPrivateAccess = "true"))
+		bool IsCrouching;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AnimationVariables, meta = (AllowPrivateAccess = "true"))
+		UCurveFloat* OnCrouchCameraCurve;
+
+	struct FTimeline* CrouchCameraTimeline;
 
 	bool m_interactable_zone;
 	bool m_pickable_itemHit;

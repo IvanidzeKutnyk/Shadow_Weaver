@@ -9,6 +9,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "DrawDebugHelpers.h"
+#include "Components/TimelineComponent.h"
+#include "Math/UnrealMathVectorCommon.h"
 
 #include "../../GameStorage/PlayerStorage.h"
 #include "../../GameObjects/GameActors/PickableActor.h"
@@ -17,7 +19,7 @@
 APlayerCharacter::APlayerCharacter()
 	: m_interactable_zone(false)
 	, m_pickable_itemHit(false)
-	, M_DEBUG(false)
+	, IsCrouching(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
@@ -43,7 +45,9 @@ APlayerCharacter::APlayerCharacter()
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false; 
+	FollowCamera->bUsePawnControlRotation = false;
+
+	CrouchCameraTimeline = new FTimeline;
 }
 
 void APlayerCharacter::BeginPlay()
@@ -52,19 +56,29 @@ void APlayerCharacter::BeginPlay()
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>
-			(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
 	GameItemsManager::GetInstance()->ParseItems();
+
+	if (OnCrouchCameraCurve)
+	{
+		FOnTimelineFloat TimelineProgress;
+		TimelineProgress.BindUFunction(this, FName("CrouchCameraAnimationProgress"));
+
+		CrouchCameraTimeline->AddInterpFloat(OnCrouchCameraCurve, TimelineProgress);
+		CrouchCameraTimeline->SetLooping(false);
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	LineTraceToItems();
+
+	CrouchCameraTimeline->TickTimeline(DeltaTime);
 }
 
 void APlayerCharacter::PressedInteractButton()
@@ -96,11 +110,7 @@ void APlayerCharacter::LineTraceToItems()
 
 		FCollisionQueryParams CollisionParams;
 
-		if(this->M_DEBUG) // Use for Debug
-		{
-			DrawDebugLine(GetWorld(), Start, END, FColor::Green, false, 1, 0, 1);
-		}
-		
+		DrawDebugLine(GetWorld(), Start, END, FColor::Green, false, 1, 0, 1);
 
 		bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, END, ECC_Visibility, CollisionParams);
 		if (isHit)
@@ -115,7 +125,7 @@ void APlayerCharacter::LineTraceToItems()
 				{
 					this->m_pickable_itemHit = true;
 				}
-				if (GEngine && this->M_DEBUG) // Use for Debug
+				if (GEngine) // Use for Debug
 				{
 					GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %i, Name: %s"),
 						OutHit.GetActor()->GetUniqueID(), *OutHit.GetActor()->GetName()));
@@ -131,23 +141,25 @@ void APlayerCharacter::SetPickableActor(APickableActor* _item)
 	this->m_tmpPickableActor = _item;
 }
 
-USpringArmComponent* APlayerCharacter::GetCameraBoom()
+USpringArmComponent* APlayerCharacter::GetCameraBoom() const
 {
 	return CameraBoom;
 }
 
-UCameraComponent* APlayerCharacter::GetFollowCamera()
+UCameraComponent* APlayerCharacter::GetFollowCamera() const
 {
 	return FollowCamera;
 }
+
+#pragma region Inputs
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
-
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) 
+	{
 		//Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -157,6 +169,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
+
+		//Crouch
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::Crouch);
 	}
 	//Picking Up
 	PlayerInputComponent->BindAction("Button_E_Interactive", IE_Pressed, this, &APlayerCharacter::PressedInteractButton);
@@ -198,4 +213,27 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void APlayerCharacter::Crouch(const FInputActionValue& Value)
+{
+	IsCrouching = !IsCrouching;
+	
+	if (IsCrouching)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 350.0f;
+		CrouchCameraTimeline->PlayFromStart();
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 500.f;
+		CrouchCameraTimeline->Reverse();
+	}
+}
+
+#pragma endregion
+
+void APlayerCharacter::CrouchCameraAnimationProgress(float Value)
+{
+	CameraBoom->TargetArmLength = FMath::Lerp(400.0f, 550.0f, Value);
 }

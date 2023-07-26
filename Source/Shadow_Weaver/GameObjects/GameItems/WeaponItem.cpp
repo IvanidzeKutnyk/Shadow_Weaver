@@ -5,10 +5,11 @@
 
 void WeaponItem::Parse(const TSharedPtr<FJsonObject>& _jsonObject)
 {
-	FString _tempWeaponParams;
-
 	//---ID---//
 	GameItem::Parse(_jsonObject);
+
+	FString _tempWeaponParams;
+
 	//---Type---//
 	_jsonObject->TryGetStringField("Type", _tempWeaponParams);
 	if (_tempWeaponParams == "OneHand") 
@@ -49,7 +50,8 @@ void WeaponItem::Parse(const TSharedPtr<FJsonObject>& _jsonObject)
 	_jsonObject->TryGetNumberField("AfterEffect", this->m_Aftereffect);
 }
 
-WeaponItem::WeaponItem() : GameItem()
+WeaponItem::WeaponItem() 
+	: GameItem()
 {
 
 }
