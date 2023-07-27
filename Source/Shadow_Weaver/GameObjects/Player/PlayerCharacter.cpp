@@ -360,8 +360,6 @@ bool APlayerCharacter::CheckIfCanVaultBy()
 						FLinearColor::Red,
 						10.0f,
 						2.0f);
-
-					can_warp = true;
 				}
 				else
 				{
@@ -389,6 +387,7 @@ bool APlayerCharacter::CheckIfCanVaultBy()
 					if (is_hit)
 					{
 						vault_end_position = sphere_hit_result.Location;
+						can_warp = true;
 						break;
 					}
 				}
