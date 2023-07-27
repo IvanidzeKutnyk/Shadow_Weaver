@@ -29,6 +29,8 @@ protected:
 
 	void Crouch(const FInputActionValue& Value);
 
+	void Shift(const FInputActionValue& Value);
+
 public:	
 	
 	virtual void Tick(float DeltaTime) override;
@@ -55,6 +57,13 @@ private:
 	UFUNCTION()
 	void CrouchCameraAnimationProgress(float Value);
 
+	UFUNCTION(BlueprintCallable)
+	void OnMontageEnded(UAnimMontage* Montage, bool bInterrunted);
+
+	bool CheckIfCanVaultBy();
+	
+	void DoVault();
+
 private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -78,17 +87,29 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 		class UInputAction* CrouchAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ShiftAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Variables, meta = (AllowPrivateAccess = "true"))
 		bool IsCrouching;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AnimationVariables, meta = (AllowPrivateAccess = "true"))
 		UCurveFloat* OnCrouchCameraCurve;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Vault, meta = (AllowPrivateAccess = "true"))
+		class UMotionWarpingComponent* VaultMotionWarping;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Vault, meta = (AllowPrivateAccess = "true"))
+		class UAnimMontage* VaultByAnimMontage;
+
 	struct FTimeline* CrouchCameraTimeline;
 
 	bool m_interactable_zone;
 	bool m_pickable_itemHit;
 
-	APickableActor* m_tmpPickableActor;
+	FVector vault_start_position;
+	FVector vault_middle_position;
+	FVector vault_end_position;
 
+	APickableActor* m_tmpPickableActor;
 };
