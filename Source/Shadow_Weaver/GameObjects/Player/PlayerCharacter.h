@@ -5,7 +5,7 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
-class APickableActor;
+class ASceneActor;
 class PlayerStorage;
 
 UCLASS(config = Game)
@@ -43,7 +43,7 @@ public:
 
 	void LineTraceToItems();
 
-	void SetPickableActor(APickableActor* _item);
+	void SetPickableActor(ASceneActor* _item);
 
 
 public:
@@ -111,5 +111,5 @@ private:
 	FVector vault_middle_position;
 	FVector vault_end_position;
 
-	APickableActor* m_tmpPickableActor;
+	ASceneActor* m_tmpPickableActor;
 };

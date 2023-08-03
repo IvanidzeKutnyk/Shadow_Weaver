@@ -16,7 +16,7 @@
 #include "Kismet/KismetMathLibrary.h"
 
 #include "../../GameStorage/PlayerStorage.h"
-#include "../../GameObjects/GameActors/PickableActor.h"
+#include "../../GameObjects/GameActors/SceneActor.h"
 #include "../../GameManagers/GameItemsManager.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -96,7 +96,7 @@ void APlayerCharacter::PressedInteractButton()
 {
 	if(this->m_interactable_zone && this->m_pickable_itemHit)
 	{
-		this->m_tmpPickableActor->Destroy();
+		this->m_tmpPickableActor->SetAction();
 	}
 }
 
@@ -147,7 +147,7 @@ void APlayerCharacter::LineTraceToItems()
 	
 }
 
-void APlayerCharacter::SetPickableActor(APickableActor* _item)
+void APlayerCharacter::SetPickableActor(ASceneActor* _item)
 {
 	this->m_tmpPickableActor = _item;
 }
